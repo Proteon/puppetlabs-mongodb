@@ -17,7 +17,8 @@ define mongodb::db (
   $roles         = ['dbAdmin'],
   $tries         = 10,
 ) {
-
+  include mongodb::client
+  
   mongodb_database { $name:
     ensure => present,
     tries  => $tries

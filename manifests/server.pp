@@ -87,6 +87,12 @@ class mongodb::server (
   $source          = undef,
 ) inherits mongodb::params {
 
+  file { $pidfilepath :
+    ensure  => 'file',
+    owner   => $user,
+    group   => $group,
+    replace => false,
+  }
 
   if $ssl {
     validate_string($ssl_key, $ssl_ca)

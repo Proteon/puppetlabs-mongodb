@@ -33,10 +33,37 @@ class mongodb::repo (
       class { '::mongodb::repo::yum': }
     }
 
+#    'Debian': {
+#      if ($repo_location != undef){
+#        $location = $repo_location
+#      }else{
+#        $location = $::operatingsystem ? {
+#          'Debian' => 'http://downloads-distro.mongodb.org/repo/debian-sysvinit',
+#          'Ubuntu' => 'http://downloads-distro.mongodb.org/repo/ubuntu-upstart',
+#          default  => undef
+#        }
+#      }
+#      class { '::mongodb::repo::apt': }
+#    }
     'Debian': {
       if ($repo_location != undef){
         $location = $repo_location
+      }elsif (versioncmp($version, '3.0.0') >= 0) {
+        $mongover = split($version, '[.]')
+        $_operatingsystem=downcase($::operatingsystem)
+        $location = $::architecture ? {
+          'amd64' => "http://repo.mongodb.org/apt/${_operatingsystem}" ,
+          default  => undef
+        }
+        $release = "${::lsbdistcodename}/mongodb-org/${mongover[0]}.${mongover[1]}"
+        $repo = $::operatingsystem ? {
+          'Debian' => 'main',
+          'Ubuntu' => 'multiverse',
+          default  => undef
+        }
       }else{
+        $repo = '10gen'
+        $release = 'dist'
         $location = $::operatingsystem ? {
           'Debian' => 'http://downloads-distro.mongodb.org/repo/debian-sysvinit',
           'Ubuntu' => 'http://downloads-distro.mongodb.org/repo/ubuntu-upstart',
