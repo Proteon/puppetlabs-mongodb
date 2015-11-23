@@ -33,8 +33,10 @@ class mongodb::params inherits mongodb::globals {
           $server_package_name   = pick($::mongodb::globals::server_package_name, 'mongodb-org-server')
           $client_package_name   = pick($::mongodb::globals::client_package_name, 'mongodb-org-shell')
           $mongos_package_name   = pick($::mongodb::globals::mongos_package_name, 'mongodb-org-mongos')
+          $tools_package_name    = pick($::mongodb::globals::tools_package_name, 'mongodb-org-tools')
           $package_ensure        = true
           $package_ensure_client = true
+          $package_ensure_tools  = true
           $package_ensure_mongos = true
         } else {
           # check if the version is greater than 2.6
@@ -42,8 +44,10 @@ class mongodb::params inherits mongodb::globals {
             $server_package_name   = pick($::mongodb::globals::server_package_name, 'mongodb-org-server')
             $client_package_name   = pick($::mongodb::globals::client_package_name, 'mongodb-org-shell')
             $mongos_package_name   = pick($::mongodb::globals::mongos_package_name, 'mongodb-org-mongos')
+            $tools_package_name    = pick($::mongodb::globals::tools_package_name, 'mongodb-org-tools')
             $package_ensure        = $::mongodb::globals::version
             $package_ensure_client = $::mongodb::globals::version
+            $package_ensure_tools  = $::mongodb::globals::version
             $package_ensure_mongos = $::mongodb::globals::version
           } else {
             $server_package_name   = pick($::mongodb::globals::server_package_name, 'mongodb-10gen')
@@ -118,9 +122,11 @@ class mongodb::params inherits mongodb::globals {
           $server_package_name = pick($::mongodb::globals::server_package_name, 'mongodb-org-server')
           $client_package_name = pick($::mongodb::globals::client_package_name, 'mongodb-org-shell')
           $mongos_package_name = pick($::mongodb::globals::mongos_package_name, 'mongodb-org-mongos')
+          $tools_package_name  = pick($::mongodb::globals::tools_package_name, 'mongodb-org-tools')
           $package_ensure = true
           $package_ensure_client = true
           $package_ensure_mongos = true
+          $package_ensure_tools  = true
           $service_name = pick($::mongodb::globals::service_name, 'mongod')
           $config = '/etc/mongod.conf'
         } else {
@@ -129,9 +135,11 @@ class mongodb::params inherits mongodb::globals {
             $server_package_name = pick($::mongodb::globals::server_package_name, 'mongodb-org-server')
             $client_package_name = pick($::mongodb::globals::client_package_name, 'mongodb-org-shell')
             $mongos_package_name = pick($::mongodb::globals::mongos_package_name, 'mongodb-org-mongos')
+            $tools_package_name  = pick($::mongodb::globals::tools_package_name, 'mongodb-org-tools')
             $package_ensure = $::mongodb::globals::version
             $package_ensure_client = $::mongodb::globals::version
             $package_ensure_mongos = $::mongodb::globals::version
+            $package_ensure_tools  = $::mongodb::globals::version
             $service_name = pick($::mongodb::globals::service_name, 'mongod')
             $config = '/etc/mongod.conf'
           } else {

@@ -5,6 +5,7 @@ class mongodb::globals (
   $server_package_name   = undef,
   $client_package_name   = undef,
   $mongos_package_name   = undef,
+  $tools_package_name    = undef,
 
   $mongod_service_manage = undef,
   $service_enable        = undef,
