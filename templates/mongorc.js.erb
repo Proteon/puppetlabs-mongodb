@@ -11,7 +11,6 @@ function authRequired() {
 }
 
 if (authRequired()) {
-  try {
 <% if @replset -%>
     rs.slaveOk()
 <% end -%>
@@ -19,9 +18,4 @@ if (authRequired()) {
     db = db.getSiblingDB('admin')
     db.auth('<%= @admin_username %>', '<%= @admin_password %>')
     db = db.getSiblingDB(prev_db)
-  }
-  catch (err) {
-    // This isn't catching authentication errors as I'd expect...
-    return;
-  }
 }
