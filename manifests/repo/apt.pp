@@ -10,9 +10,9 @@ class mongodb::repo::apt inherits mongodb::repo {
       location    => $::mongodb::repo::location,
       release     => $::mongodb::repo::release,
       repos       => $::mongodb::repo::repo,
-      key         => '492EAFE8CD016A07919F1D2B9ECBEC467F0CEB10',
-      key_server  => 'hkp://keyserver.ubuntu.com:80',
-      include_src => false,
+      key         => { 'server' => 'hkp://keyserver.ubuntu.com:80', 'id' => '492EAFE8CD016A07919F1D2B9ECBEC467F0CEB10'},
+      #key_server  => 'hkp://keyserver.ubuntu.com:80',
+      include     => { 'src' => false},
     }
 
     Apt::Source['mongodb']->Package<|tag == 'mongodb'|>
