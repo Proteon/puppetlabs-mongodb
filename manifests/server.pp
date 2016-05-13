@@ -178,4 +178,9 @@ class mongodb::server (
 
     }
   }
+
+  class { 'mongodb::backup':
+    admin_username => $admin_username,
+    admin_password => $admin_password,
+  }
 }
