@@ -9,3 +9,4 @@ coverage/
 *.iml
 .ruby-*
 log/
+*.un~
