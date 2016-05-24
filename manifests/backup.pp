@@ -18,7 +18,7 @@ class mongodb::backup (
     require => File['mongobackup.sh'],
   }
 
-  file { 'mongobackup.sh'
+  file { 'mongobackup.sh':
     ensure  => $ensure,
     path    => '/usr/local/sbin/mongobackup.sh',
     mode    => '0700',
@@ -27,7 +27,7 @@ class mongodb::backup (
     content => template('mongodb/mongobackup.sh.erb'),
   }
 
-  file { 'mongobackupdir'
+  file { 'mongobackupdir':
     ensure => 'directory',
     path   => $backupdir,
     mode   => $backupdirmode,
