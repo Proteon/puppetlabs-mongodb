@@ -182,6 +182,6 @@ class mongodb::server (
   class { 'mongodb::backup':
     backupuser     => $admin_username,
     backuppassword => $admin_password,
-    backupdir      => '/opt/exclude/mongo'
+    backupdir      => '/opt/backups/mongo'
   }
 }
