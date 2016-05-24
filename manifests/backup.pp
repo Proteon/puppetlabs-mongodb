@@ -1,13 +1,37 @@
-# This installs a MongoDB backup dump cron job.
+# This installs a MongoDB backup dump script and cron job.
 class mongodb::backup (
-  $admin_username  = $mongodb::params::admin_username,
-  $admin_password  = undef,
+  $backupuser,
+  $backuppassword,
+  $backupdir,
+  $backupdirmode = '0700'
+  $backupdirowner = 'root',
+  $backupdirgroup = 'root',
+  $backuprotate = 30,
+  $ensure = 'present',
+  $time = ['23', '0'],
 ) inherits mongodb::params {
-  # Backup cron job
   cron { 'MongoDB backup':
-    command  => "mongodump --username ${admin_username} --password ${admin_password} --out /opt/backups/mongo.`date +\%Y\%m\%d` --quiet && wait; cd /opt/backups && wait; tar czf /opt/backups/mongo.`date +\%Y\%m\%d`.tar.gz mongo.`date +\%Y\%m\%d` && wait; rm -Rf mongo.`date +\%Y\%m\%d` && wait;",
-    user     => 'root',
-    hour     => 23,
-    minute   => 0,
+    command => "/usr/local/sbin/mongobackup.sh",
+    user    => 'root',
+    hour    => $time[0],
+    minute  => $time[1],
+    require => File['mongobackup.sh'],
+  }
+
+  file { 'mongobackup.sh'
+    ensure  => $ensure,
+    path    => '/usr/local/sbin/mongobackup.sh',
+    mode    => '0700',
+    owner   => 'root',
+    group   => 'root',
+    content => template('mongodb/mongobackup.sh.erb'),
+  }
+
+  file { 'mongobackupdir'
+    ensure => 'directory',
+    path   => $backupdir,
+    mode   => $backupdirmode,
+    owner  => $backupdirowner,
+    group  => $backupdirgroup,
   }
 }

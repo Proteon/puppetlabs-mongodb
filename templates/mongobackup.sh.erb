@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# MongoDB Backup Script
+#  Dumps Mongo databases to a file for another backup tool to pick up.
+#
+##### START CONFIG ###################################################
+
+USER=<%= @backupuser %>
+PASS=<%= @backuppassword %>
+DIR=<%= @backupdir %>
+ROTATE=<%= [ Integer(@backuprotate) - 1, 0 ].max %>
+
+PREFIX=mongo_backup_
+DATE=$(date +%Y%m%d)
+
+##### STOP CONFIG ####################################################
+PATH=/usr/bin:/usr/sbin:/bin:/sbin
+
+set -o pipefail
+
+cleanup()
+{
+    find "${DIR}/" -maxdepth 1 -type f -name "${PREFIX}*.tar.gz*" -mtime +${ROTATE} -print0 | xargs -0 -r rm -f
+}
+
+cleanup
+
+mongodump --username ${USER} --password ${PASS} --out ${DIR}/${PREFIX}${DATE} --quiet
+
+tar czf ${DIR}/${PREFIX}${DATE}.tar.gz ${DIR}/${PREFIX}${DATE}
+
+rm -Rf ${DIR}/${PREFIX}${DATE}
