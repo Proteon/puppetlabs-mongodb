@@ -3,7 +3,7 @@ class mongodb::backup (
   $backupuser,
   $backuppassword,
   $backupdir,
-  $backupdirmode = '0700'
+  $backupdirmode = '0700',
   $backupdirowner = 'root',
   $backupdirgroup = 'root',
   $backuprotate = 30,
