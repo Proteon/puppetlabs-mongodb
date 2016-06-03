@@ -10,6 +10,8 @@ class mongodb::backup (
   $ensure = 'present',
   $time = ['23', '0'],
 ) inherits mongodb::params {
+  include mongodb::client
+
   cron { 'MongoDB backup':
     command => "/usr/local/sbin/mongobackup.sh",
     user    => 'root',
