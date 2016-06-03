@@ -24,9 +24,11 @@ cleanup()
 }
 
 cleanup
-
+wait
 mongodump --username ${USER} --password ${PASS} --out ${DIR}/${PREFIX}${DATE} --quiet
-
+wait
+cd ${DIR}
 tar czf ${DIR}/${PREFIX}${DATE}.tar.gz ${DIR}/${PREFIX}${DATE}
-
+wait
 rm -Rf ${DIR}/${PREFIX}${DATE}
+wait
