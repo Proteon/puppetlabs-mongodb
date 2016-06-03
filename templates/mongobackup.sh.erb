@@ -29,7 +29,7 @@ mongodump --username ${USER} --password ${PASS} --out ${DIR}/${PREFIX}${DATE} --
 wait
 cd ${DIR}
 wait
-tar czf ${DIR}/${PREFIX}${DATE}.tar.gz ${DIR}/${PREFIX}${DATE}
+tar czf ${DIR}/${PREFIX}${DATE}.tar.gz ${PREFIX}${DATE}
 wait
 rm -Rf ${DIR}/${PREFIX}${DATE}
 wait
