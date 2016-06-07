@@ -31,8 +31,10 @@ if mongodump --username ${USER} --password ${PASS} --host ${HOST} --out ${DIR}/$
     rm -Rf ${DIR}/${PREFIX}${DATE}; wait
     exit 0
   else
+    echo "MongoDB Backup: unable to compress dump"
     exit 1
   fi
 else
+  echo "MongoDB Backup: unable to create dump"
   exit 1
 fi
