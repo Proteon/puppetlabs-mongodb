@@ -25,7 +25,7 @@ cleanup()
 }
 
 cleanup; wait
-if mongodump --username ${USER} --password ${PASS} --host ${HOST} --out ${DIR}/${PREFIX}${DATE}; then
+if mongodump --username ${USER} --password ${PASS} --host ${HOST} --out ${DIR}/${PREFIX}${DATE} --quiet; then
   cd ${DIR}; wait
   if tar czf ${DIR}/${PREFIX}${DATE}.tar.gz ${PREFIX}${DATE}; then
     rm -Rf ${DIR}/${PREFIX}${DATE}; wait
