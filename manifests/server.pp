@@ -182,6 +182,7 @@ class mongodb::server (
   class { 'mongodb::backup':
     backupuser     => $admin_username,
     backuppassword => $admin_password,
+    backuphost     => $bind_ip,
     backupdir      => '/opt/backups/mongo'
   }
 }
