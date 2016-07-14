@@ -104,7 +104,7 @@ class mongodb::params inherits mongodb::globals {
         } else {
           $config                  = '/etc/mongodb.conf'
           $mongos_config           = '/etc/mongodb-shard.conf'
-          $pidfilepath             = '/var/run/mongodb/mongodb.pid'
+          $pidfilepath             = '/var/run/mongodb/mongod.pid'
           $mongos_pidfilepath      = undef
           $mongos_unixsocketprefix = undef
           $mongos_logpath          = undef
