@@ -32,7 +32,6 @@
 #
 # Copyright 2013 PuppetLabs
 #
-
 class mongodb (
   # Deprecated parameters
   $enable_10gen    = undef,
@@ -81,7 +80,8 @@ class mongodb (
   $key             = undef,
   $ipv6            = undef,
   $bind_ip         = undef,
-  $pidfilepath     = undef
+  $pidfilepath     = undef,
+  $pidfilemode     = undef
 ) inherits mongodb::params {
 
   if $enable_10gen {

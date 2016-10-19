@@ -5,9 +5,11 @@ class mongodb::server::config {
   $group           = $mongodb::server::group
   $config          = $mongodb::server::config
   $config_content  = $mongodb::server::config_content
+  $config_template = $mongodb::server::config_template
 
   $dbpath          = $mongodb::server::dbpath
   $pidfilepath     = $mongodb::server::pidfilepath
+  $pidfilemode     = $mongodb::server::pidfilemode
   $logpath         = $mongodb::server::logpath
   $logappend       = $mongodb::server::logappend
   $fork            = $mongodb::server::fork
@@ -55,6 +57,7 @@ class mongodb::server::config {
   $bind_ip         = $mongodb::server::bind_ip
   $directoryperdb  = $mongodb::server::directoryperdb
   $profile         = $mongodb::server::profile
+  $maxconns        = $mongodb::server::maxconns
   $set_parameter   = $mongodb::server::set_parameter
   $syslog          = $mongodb::server::syslog
   $ssl             = $mongodb::server::ssl
@@ -100,7 +103,9 @@ class mongodb::server::config {
     #Pick which config content to use
     if $config_content {
       $cfg_content = $config_content
-    } elsif (versioncmp($version, '2.6.0') >= 0) {
+    } elsif $config_template {
+      $cfg_content = template($config_template)
+    } elsif $version and (versioncmp($version, '2.6.0') >= 0) {
       # Template uses:
       # - $auth
       # - $bind_ip
@@ -122,6 +127,7 @@ class mongodb::server::config {
       # - $objcheck
       # - $oplog_size
       # - $pidfilepath
+      # - $pidfilemode
       # - $port
       # - $profile
       # - $quota
@@ -132,6 +138,9 @@ class mongodb::server::config {
       # - $shardsvr
       # - $slowms
       # - $smallfiles
+      # - $ssl
+      # - $ssl_ca
+      # - $ssl_key
       # - $syslog
       # - $verbose
       # - $verbositylevel
@@ -169,6 +178,7 @@ class mongodb::server::config {
       # - $only
       # - $oplog_size
       # - $pidfilepath
+      # - $pidfilemode
       # - $port
       # - $profile
       # - $quiet
@@ -200,11 +210,23 @@ class mongodb::server::config {
     }
 
     file { $dbpath:
-      ensure  => directory,
-      mode    => '0755',
-      owner   => $user,
-      group   => $group,
-      require => File[$config]
+      ensure   => directory,
+      mode     => '0755',
+      owner    => $user,
+      group    => $group,
+      recurse  => true,
+      purge    => false,
+      checksum => 'none',
+      require  => File[$config],
+    }
+
+    if $pidfilepath {
+      file { $pidfilepath:
+        ensure => file,
+        mode   => $pidfilemode,
+        owner  => $user,
+        group  => $group,
+      }
     }
   } else {
     file { $dbpath:
@@ -213,7 +235,7 @@ class mongodb::server::config {
       backup => false,
     }
     file { $config:
-      ensure => absent
+      ensure => absent,
     }
   }
 
@@ -223,11 +245,11 @@ class mongodb::server::config {
       content => template('mongodb/mongorc.js.erb'),
       owner   => 'root',
       group   => 'root',
-      mode    => '0644'
+      mode    => '0600',
     }
   } else {
     file { $rcfile:
-      ensure => absent
+      ensure => absent,
     }
   }
 }

@@ -67,7 +67,7 @@ For Red Hat family systems, the client can be installed in a similar fashion:
 class {'::mongodb::client':}
 ```
 
-Note that for Debian/Ubuntu family systems the client is installed with the 
+Note that for Debian/Ubuntu family systems the client is installed with the
 server. Using the client class will by default install the server.
 
 If one plans to configure sharding for a Mongo deployment, the module offer
@@ -88,8 +88,8 @@ To install MongoDB from 10gen repository:
 class {'::mongodb::globals':
   manage_package_repo => true,
 }->
-class {'::mongodb::server': }->
-class {'::mongodb::client': }
+class {'::mongodb::client': } ->
+class {'::mongodb::server': }
 ```
 
 If you don't want to use the 10gen/MongoDB software repository or the OS packages,
@@ -231,6 +231,15 @@ the module will use the default for your OS distro.
 #####`repo_location`
 This setting can be used to override the default MongoDB repository location.
 If not specified, the module will use the default repository for your OS distro.
+
+#####`repo_proxy`
+This will allow you to set a proxy for your repository in case you are behind a corporate firewall. Currently this is only supported with yum repositories
+
+#####`proxy_username`
+This sets the username for the proxyserver, should authentication be required
+
+#####`proxy_password`
+This sets the password for the proxyserver, should authentication be required
 
 ####Class: mongodb::server
 
@@ -418,11 +427,11 @@ class mongodb::server {
 Set to true to enable a simple REST interface. Default: false
 
 #####`quiet`
-Runs the mongod or mongos instance in a quiet mode that attempts to limit the 
+Runs the mongod or mongos instance in a quiet mode that attempts to limit the
 amount of output. This option suppresses : "output from database commands, including drop, dropIndexes, diagLogging, validate, and clean", "replication activity", "connection accepted events" and "connection closed events".
 Default: false
 
-> For production systems this option is **not** recommended as it may make tracking 
+> For production systems this option is **not** recommended as it may make tracking
 problems during particular connections much more difficult.
 
 #####`slowms`
@@ -433,7 +442,7 @@ Default: 100 ms
 Specify the path to a key file to store authentication information. This option
 is only useful for the connection between replica set members. Default: None
 
-#####'key'
+#####`key`
 Specify the key contained within the keyfile. This option
 is only useful for the connection between replica set members. Default: None
 
@@ -467,8 +476,9 @@ this slave instance will replicate. Default: <>
 
 #####`ssl`
 Set to true to enable ssl. Default: <>
-*Important*: You need to have ssl_key and ssl_ca set as well and files
-need to pre-exist on node.
+*Important*: You need to have ssl_key set as well, and the file needs to
+pre-exist on node. If you wish to use certificate validation, ssl_ca must also
+be set.
 
 #####`ssl_key`
 Default: <>
@@ -521,6 +531,9 @@ Path of the config file. If not specified, the module will use the default
 for your OS distro.
 
 #####`config_content`
+Config content if the default doesn't match one needs.
+
+#####`config_template`
 Path to the config template if the default doesn't match one needs.
 
 #####`configdb`
