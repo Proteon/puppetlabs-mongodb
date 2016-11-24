@@ -1,0 +1,3 @@
+[submodule "files/nagios-plugin-mongodb"]
+	path = files/nagios-plugin-mongodb
+	url = https://github.com/mzupan/nagios-plugin-mongodb.git
