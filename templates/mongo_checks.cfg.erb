@@ -1,0 +1,3 @@
+command[mongodb_connection]=<%= @script_path %> -H <%= @address %> -P <%= @port %> -A connect -W <%= @conn_warn_value %> -C <%= @conn_crit_value %>
+command[mongodb_replicaset]=<%= @script_path %> -H <%= @address %> -P <%= @port %> -A replset_state -W <%= @repl_warn_value %> -C <%= @repl_crit_value %>
+
