@@ -1,19 +1,22 @@
 #
 class mongodb::checks (
-    $script_path = '/etc/nagios-plugins/check_mongodb.py'
+    $script_path = '/etc/nagios-plugins/check_mongodb.py',
     $address,
-    $port = 27107,
+    $port = 27017,
     $conn_warn_value = 2,
     $conn_crit_value = 4,
     # For authentication we assume you have a ~/.mongorc.js with login details.
 ) {
+    # Install script requirements
+    python::pip { 'pymongo': }
+
     # The executable script.
     file { $script_path:
         ensure  => 'file',
         owner   => 'root',
         group   => 'root',
         mode    => '0755',
-        content => file("puppet:///modules/${module_name}/nagios-plugin-mongodb/check_mongodb.py"),
+        source  => "puppet:///modules/${module_name}/nagios-plugin-mongodb/check_mongodb.py",
     }
 
     # Allow nagios to run the script as any user.
@@ -23,7 +26,7 @@ class mongodb::checks (
         group   => 'root',
         mode    => '0644',
         # sudoers require an empty newline
-        content => "nagios ALL=(ALL) NOPASSWD:/etc/nagios-plugins/check_mongodb.py\n\n"
+        content => "nagios ALL=(ALL) NOPASSWD:${script_path}\n\n"
     }
 
     # Available commands
