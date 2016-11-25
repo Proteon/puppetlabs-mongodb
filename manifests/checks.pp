@@ -8,6 +8,7 @@ class mongodb::checks (
     # For authentication we assume you have a ~/.mongorc.js with login details.
 ) {
     # Install script requirements
+    include python
     python::pip { 'pymongo': }
 
     # The executable script.
