@@ -1,6 +1,5 @@
 # Class for setting cross-class global overrides. See README.md for more
 # details.
-
 class mongodb::globals (
   $server_package_name   = undef,
   $client_package_name   = undef,
@@ -28,11 +27,16 @@ class mongodb::globals (
 
   $manage_package_repo   = undef,
   $manage_package        = undef,
+  $repo_proxy            = undef,
+  $proxy_username        = undef,
+  $proxy_password        = undef,
 
   $repo_location         = undef,
   $use_enterprise_repo   = undef,
 
   $pidfilepath           = undef,
+  $pidfilemode           = undef,
+  $manage_pidfile        = undef,
 ) {
 
   # Setup of the repo only makes sense globally, so we are doing it here.
@@ -40,6 +44,7 @@ class mongodb::globals (
     class { '::mongodb::repo':
       ensure        => present,
       repo_location => $repo_location,
+      proxy         => $repo_proxy,
     }
   }
 }

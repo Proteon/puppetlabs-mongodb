@@ -1,10 +1,10 @@
 HOSTS:
-  'centos-7-vcloud':
+  'ubuntu-1404-64':
     roles:
       - master
-    platform: el-7-x86_64
+    platform: ubuntu-14.04-amd64
     hypervisor: vcloud
-    template: centos-7-x86_64
+    template: ubuntu-1404-x86_64
 CONFIG:
   type: foss
   ssh:

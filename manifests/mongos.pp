@@ -3,9 +3,10 @@ class mongodb::mongos (
   $ensure           = $mongodb::params::mongos_ensure,
   $config           = $mongodb::params::mongos_config,
   $config_content   = undef,
+  $config_template  = undef,
   $configdb         = $mongodb::params::mongos_configdb,
   $service_manage   = $mongodb::params::mongos_service_manage,
-  $service_provider = $mongodb::params::mongos_service_provider,
+  $service_provider = undef,
   $service_name     = $mongodb::params::mongos_service_name,
   $service_enable   = $mongodb::params::mongos_service_enable,
   $service_ensure   = $mongodb::params::mongos_service_ensure,
@@ -23,26 +24,26 @@ class mongodb::mongos (
 
   if ($ensure == 'present' or $ensure == true) {
     if $restart {
-      anchor { 'mongodb::mongos::start': }->
-      class { 'mongodb::mongos::install': }->
+      anchor { 'mongodb::mongos::start': }
+      -> class { 'mongodb::mongos::install': }
       # If $restart is true, notify the service on config changes (~>)
-      class { 'mongodb::mongos::config': }~>
-      class { 'mongodb::mongos::service': }->
-      anchor { 'mongodb::mongos::end': }
+      -> class { 'mongodb::mongos::config': }
+      ~> class { 'mongodb::mongos::service': }
+      -> anchor { 'mongodb::mongos::end': }
     } else {
-      anchor { 'mongodb::mongos::start': }->
-      class { 'mongodb::mongos::install': }->
+      anchor { 'mongodb::mongos::start': }
+      -> class { 'mongodb::mongos::install': }
       # If $restart is false, config changes won't restart the service (->)
-      class { 'mongodb::mongos::config': }->
-      class { 'mongodb::mongos::service': }->
-      anchor { 'mongodb::mongos::end': }
+      -> class { 'mongodb::mongos::config': }
+      -> class { 'mongodb::mongos::service': }
+      -> anchor { 'mongodb::mongos::end': }
     }
   } else {
-    anchor { 'mongodb::mongos::start': }->
-    class { '::mongodb::mongos::service': }->
-    class { '::mongodb::mongos::config': }->
-    class { '::mongodb::mongos::install': }->
-    anchor { 'mongodb::mongos::end': }
+    anchor { 'mongodb::mongos::start': }
+    -> class { '::mongodb::mongos::service': }
+    -> class { '::mongodb::mongos::config': }
+    -> class { '::mongodb::mongos::install': }
+    -> anchor { 'mongodb::mongos::end': }
   }
 
 }

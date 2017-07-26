@@ -69,7 +69,7 @@ Puppet::Type.type(:mongodb_replset).provide(:mongo, :parent => Puppet::Provider:
   end
 
   def rs_initiate(conf, master)
-    if auth_enabled
+    if auth_enabled && auth_enabled != 'disabled'
       return mongo_command("rs.initiate(#{conf})", initialize_host)
     else
       return mongo_command("rs.initiate(#{conf})", master)
@@ -116,7 +116,11 @@ Puppet::Type.type(:mongodb_replset).provide(:mongo, :parent => Puppet::Provider:
 
   def self.get_replset_properties
     conn_string = get_conn_string
-    output = mongo_command('rs.conf()', conn_string)
+    begin
+      output = mongo_command('rs.conf()', conn_string)
+    rescue Puppet::ExecutionFailure => e
+      output = {}
+    end
     if output['members']
       members = output['members'].collect do |val|
         val['host']
@@ -269,6 +273,7 @@ Puppet::Type.type(:mongodb_replset).provide(:mongo, :parent => Puppet::Provider:
     output.gsub!(/ISODate\((.+?)\)/, '\1 ')
     output.gsub!(/Timestamp\((.+?)\)/, '[\1]')
     output.gsub!(/NumberLong\((.+?)\)/, '[\1]')
+
     #Hack to avoid non-json empty sets
     output = "{}" if output == "null\n"
 

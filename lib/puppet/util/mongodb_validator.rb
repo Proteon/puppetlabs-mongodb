@@ -20,7 +20,7 @@ module Puppet
           @mongodb_server = IPAddr.new(uri.host).to_s
           @mongodb_port = uri.port
         rescue
-          @mongodb_server = IPAddr.new(mongodb_server).to_s
+          @mongodb_server = mongodb_server.to_s
           @mongodb_port   = mongodb_port
         end
       end
@@ -31,7 +31,7 @@ module Puppet
       #
       # @return true if the connection is successful, false otherwise.
       def attempt_connection
-        Timeout::timeout(Puppet[:configtimeout]) do
+        Timeout::timeout(Puppet[:http_connect_timeout]) do
           begin
             TCPSocket.new(@mongodb_server, @mongodb_port).close
             true
